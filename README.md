@@ -26,7 +26,7 @@ pip3 install -r requirements.txt
 
 ### 4. 集計
 ```bash
-python3 src/tally_activities.py
+python3 src/main.py
 ```
 
 ## 余談
