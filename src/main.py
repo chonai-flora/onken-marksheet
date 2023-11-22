@@ -5,7 +5,7 @@ import openpyxl
 from functions import get_activities, write_to_namelist, write_to_report
 
 
-def get_days_in_month(year, month) -> int:
+def get_days_in_month(year, month):
     is_leap = calendar.isleap(year)
 
     if month == 2:
@@ -16,7 +16,7 @@ def get_days_in_month(year, month) -> int:
         return 31
         
 
-def main() -> None:
+def main():
     all_member_count = 70
     year = 2023
     month = 9
@@ -49,9 +49,14 @@ def main() -> None:
                 activities = get_activities(filename, days // 2, all_member_count // 2)
                 write_to_namelist(workbook, activities, setting["start_row"], setting["start_column"])
 
-            write_to_report(workbook, days, all_member_count, 7, 8)                        
+            start = time.time()
+            
+            write_to_report(workbook, days, all_member_count, 7, 8) 
             workbook.save(f"../excel/{month}月活動報告書.xlsx")
-            print("活動報告書を作成しました")
+            print(f"\"{month}月活動報告書.xlsx\" を作成しました")
+            
+            end = time.time()
+            print("所要時間: {:.3f}秒".format(end - start))
         except Exception as e:
             print("エラーが発生しました")
             print(e)

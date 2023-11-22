@@ -6,7 +6,7 @@ from openpyxl.utils import get_column_letter
 
 
 # マークシートからマークを検出
-def get_marks(image, lower_color, upper_color) -> list[tuple[tuple[int, int], int]]:
+def get_marks(image, lower_color, upper_color):
     hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
     blur = cv2.GaussianBlur(hsv, (9, 9), 0)
     color = cv2.inRange(blur, lower_color, upper_color)
@@ -29,7 +29,7 @@ def get_marks(image, lower_color, upper_color) -> list[tuple[tuple[int, int], in
 
 
 # マークの座標をもとに二次元配列を作成
-def get_activities(filename, rows, columns) -> list[list[bool]]:
+def get_activities(filename, rows, columns):
     cell_width, cell_height = 150, 50
     
     image = cv2.imread(filename)
@@ -49,14 +49,14 @@ def get_activities(filename, rows, columns) -> list[list[bool]]:
     return activities
 
 
-def write_to_namelist(workbook, activities, start_row, start_column) -> None:
+def write_to_namelist(workbook, activities, start_row, start_column):
     for row, line in enumerate(activities):
         for column, cell in enumerate(line):
             if cell:
                 workbook["名簿"].cell(row=row + start_row, column=column + start_column, value=1)
 
                 
-def write_to_report(workbook, days, all_member_count, start_row, start_column) -> None:
+def write_to_report(workbook, days, all_member_count, start_row, start_column):
     for day in range(start_column, start_column + days):
         letter = get_column_letter(day)
         cell_range = f"{letter}{start_row}:{letter}{start_row + all_member_count}"
