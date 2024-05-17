@@ -22,8 +22,8 @@ pip3 install -r requirements.txt
 `excel/マークシート.xlsx` と `scanned/sample/` 内の画像を参考にしてください。
 
 ### 3. `excel/` に元となるExcelファイルを配置
-学生会から配布される各部活動の報告書の元ファイルを配置してください。  
-デフォルトのファイル名は `excel/<month>月元ファイル.xlsx` としています。
+`excel/元ファイル.xlsx` を `excel/<month>月元ファイル.xlsx` に変更し、名簿を入力してください。  
+元ファイルとマークシートの名簿は同じ順にしてください。
 
 ### 4. 集計
 ```bash

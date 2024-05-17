@@ -1,3 +1,4 @@
+import time
 import glob
 import calendar
 import openpyxl
@@ -15,9 +16,9 @@ def get_days_in_month(year, month) -> int:
         
 
 def main() -> None:
-    all_member_count = 70   # マークシートの人数
-    year = 2023             # 年
-    month = 9               # 月
+    all_member_count = 90   # マークシートの人数
+    year = 2024             # 年
+    month = 6               # 月
     days = get_days_in_month(year, month)
     filenames = glob.glob("../scanned/*.png")
     settings = [            # 書き込み設定
@@ -26,7 +27,11 @@ def main() -> None:
             "start_column": 8,
         },
         {
-            "start_row": 7 + all_member_count // 2,
+            "start_row": 7 + all_member_count // 3,
+            "start_column": 8,
+        },
+        {
+            "start_row": 7 + all_member_count // 3 * 2,
             "start_column": 8,
         },
         {
@@ -34,24 +39,35 @@ def main() -> None:
             "start_column": 8 + days // 2,
         },
         {
-            "start_row": 7 + all_member_count // 2,
+            "start_row": 7 + all_member_count // 3,
+            "start_column": 8 + days // 2,
+        },
+        {
+            "start_row": 7 + all_member_count // 3 * 2,
             "start_column": 8 + days // 2,
         },
     ]
-
+    
     with open(f"../excel/{month}月元ファイル.xlsx", "rb") as f:
         try:
             workbook = openpyxl.load_workbook(f)    
 
             for filename, setting in zip(filenames, settings):
-                activities = get_activities(filename, days // 2, all_member_count // 2)
+                activities = get_activities(filename, days // 2, all_member_count // 3)
                 write_to_namelist(workbook, activities, setting["start_row"], setting["start_column"])
 
             start = time.time()
             
-            write_to_report(workbook, days, all_member_count, 7, 8) 
-            workbook.save(f"../excel/{month}月活動報告書.xlsx")
-            print(f"\"{month}月活動報告書.xlsx\" を作成しました")
+            write_to_report(
+                workbook,
+                days,
+                all_member_count,
+                settings[0]["start_row"],
+                settings[0]["start_column"]
+            )
+            report_filename = f"../excel/{month}月活動報告書_音楽研究部.xlsx"
+            workbook.save(report_filename)
+            print(f"`{report_filename}.xlsx` を作成しました")
             
             end = time.time()
             print("所要時間: {:.3f}秒".format(end - start))
