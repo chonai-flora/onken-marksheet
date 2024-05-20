@@ -20,7 +20,7 @@ def main() -> None:
     year = 2024             # 年
     month = 6               # 月
     days = get_days_in_month(year, month)
-    filenames = glob.glob("../scanned/*.png")
+    marksheets = glob.glob("../scanned/*.png")
     settings = [            # 書き込み設定
         {
             "start_row": 7,
@@ -50,13 +50,12 @@ def main() -> None:
     
     with open(f"../excel/{month}月元ファイル.xlsx", "rb") as f:
         try:
+            start = time.time()
             workbook = openpyxl.load_workbook(f)    
 
-            for filename, setting in zip(filenames, settings):
-                activities = get_activities(filename, days // 2, all_member_count // 3)
+            for marksheet, setting in zip(marksheets, settings):
+                activities = get_activities(marksheet, days // 2, all_member_count // 3)
                 write_to_namelist(workbook, activities, setting["start_row"], setting["start_column"])
-
-            start = time.time()
             
             write_to_report(
                 workbook,
@@ -65,9 +64,9 @@ def main() -> None:
                 settings[0]["start_row"],
                 settings[0]["start_column"]
             )
-            report_filename = f"../excel/{month}月活動報告書_音楽研究部.xlsx"
-            workbook.save(report_filename)
-            print(f"`{report_filename}.xlsx` を作成しました")
+            filename = f"../excel/{month}月活動報告書_音楽研究部.xlsx"
+            workbook.save(filename)
+            print(f"`{filename}.xlsx` を作成しました")
             
             end = time.time()
             print("所要時間: {:.3f}秒".format(end - start))
